@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Integration</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+          font-family: 'Poppins', sans-serif;
+          margin: 0;
+          padding: 0;
+          background: linear-gradient(120deg, #84fab0, #8fd3f4);
+          color: #fff;
+          text-align: center;
+        }
+        .container {
+          max-width: 800px;
+          margin: 50px auto;
+          background: rgba(255, 255, 255, 0.9);
+          padding: 20px;
+          border-radius: 15px;
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+          color: #333;
+        }
+        h1 {
+          text-align: center;
+          color: #333;
+          font-weight: 600;
+        }
+        .input-container {
+          margin: 20px 0;
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        input[type="text"],
+        textarea#output-text {
+          padding: 10px;
+          font-size: 16px;
+          border: 2px solid #84fab0;
+          border-radius: 8px;
+          outline: none;
+          width: 60%;
+          transition: all 0.3s ease;
+        }
+        input[type="text"]:focus,
+        textarea#output-text:focus {
+          border-color: #8fd3f4;
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        }
+        textarea#output-text {
+          background: #f9f9f9;
+          resize: none;
+          overflow: hidden;
+          color: #333;
+        }
+        button {
+          background: linear-gradient(120deg, #84fab0, #8fd3f4);
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 8px;
+          font-size: 16px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        button:hover {
+          background: linear-gradient(120deg, #8fd3f4, #84fab0);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .error {
+          color: red;
+          text-align: center;
+        }
+        .logo {
+          display: block;
+          margin: 0 auto 20px auto;
+          max-width: 170px;
+        }
+        .gif-container {
+          text-align: center;
+          margin-top: 20px;
+        }
+        .gif-container img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 10px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzhjZnB0NjViMm1neGMwMzY5amF6dGF6Zjl3am5naWMxbzJ4cThqZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2Do1uDKXm4nqR2CnT7/giphy.gif"
+         alt="Logo" class="logo">
+    <h1>API Data Viewer</h1>
+    <div class="input-container">
+        <input type="text" id="input-text" placeholder="Enter text here...">
+        <button onclick="fetchData()">Submit</button>
+    </div>
+    <div class="input-container">
+        <textarea id="output-text" placeholder="Output will appear here..." readonly></textarea>
+    </div>
+    <p id="error-message" class="error"></p>
+    <!--<div class="gif-container">
+        <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" alt="Loading GIF">
+    </div>-->
+</div>
+
+<script>
+    async function fetchData() {
+      const inputText = document.getElementById('input-text').value;
+      const outputText = document.getElementById('output-text');
+      const errorMessage = document.getElementById('error-message');
+
+      // Clear previous errors
+      errorMessage.textContent = '';
+
+      try {
+        const response = await axios.get(`http://localhost:9092/api/generate?promptTxt=${encodeURIComponent(inputText)}`);
+        const data = response.data;
+
+        // Set the response in the read-only output field
+        outputText.value = data;
+
+        // Dynamically adjust the height of the textarea to fit content
+        outputText.style.height = 'auto'; // Reset height
+        outputText.style.height = `${outputText.scrollHeight}px`; // Set to fit content
+      } catch (error) {
+        errorMessage.textContent = 'Failed to fetch data: ' + error.message;
+      }
+    }
+</script>
+</body>
+</html>

@@ -13,7 +13,7 @@ public class OllamaAIService {
     private OllamaChatModel chatModel;
     public String generatedResponse(String promptMsg){
         if(!promptMsg.isBlank()){
-            ChatResponse response = chatModel.call(new Prompt(promptMsg, OllamaOptions.create().withModel("llama2")));      //Ollama llama2 7B ChatModel call
+            ChatResponse response = chatModel.call(new Prompt(promptMsg, OllamaOptions.create().withModel("deepseek-r1:14b")));      //Ollama llama2 7B ChatModel call
             return response.getResult().getOutput().getContent();                                                           //can also call other Ollama model like LLava
         }
         else
